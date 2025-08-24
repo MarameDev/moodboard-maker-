@@ -1,156 +1,121 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <title>My Mood Board • Marame</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet" />
-  <style>
-    /* Body & Background */
-    body {
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      padding: 20px;
-      background: linear-gradient(135deg, #e6e0ff 25%, #d1c4ff 75%);
-      color: #333;
-      background-image:
-        radial-gradient(circle at 10% 10%, rgba(130, 90, 255, 0.05) 2px, transparent 3px),
-        radial-gradient(circle at 80% 20%, rgba(130, 90, 255, 0.05) 2px, transparent 3px),
-        radial-gradient(circle at 50% 80%, rgba(130, 90, 255, 0.05) 2px, transparent 3px);
-      background-repeat: repeat;
-      background-size: 120px 120px;
-      opacity: 0;
-      animation: fadeIn 1s forwards;
-    }
+/* General Styles */
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #E6E0F8;
+  background-image: url('https://images.unsplash.com/photo-1549887534-2a78fa5e5a8b?auto=format&fit=crop&w=1500&q=60');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
+header {
+  text-align: center;
+  padding: 30px 20px 10px;
+  background: rgba(230, 224, 248, 0.8);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
 
-    /* Header */
-    header {
-      max-width: 900px;
-      margin: 0 auto 20px;
-      position: sticky;
-      top: 0;
-      background: #f2eaff;
-      padding: 20px 0;
-      box-shadow: 0 2px 5px rgba(130, 90, 255, 0.1);
-      z-index: 100;
-    }
+header h1 {
+  font-family: 'Great Vibes', cursive;
+  font-size: 3rem;
+  margin: 0;
+  color: #6B4EFF;
+}
 
-    h1 {
-      color: #825aff;
-      margin-bottom: 6px;
-      font-weight: 600;
-      font-size: 2.5rem;
-    }
+header p {
+  margin: 5px 0 0;
+  font-size: 1.2rem;
+  color: #5a4a9c;
+}
 
-    p.lead {
-      color: #4d4d4d;
-      margin-top: 0;
-      font-weight: 300;
-      font-size: 1.1rem;
-    }
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
 
-    /* Main container */
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      display: grid;
-      gap: 18px;
-      grid-template-columns: 1fr;
-    }
+.card {
+  background: rgba(255,255,255,0.85);
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 30px;
+  max-width: 900px;
+  width: 100%;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  text-align: center;
+}
 
-    .card {
-      background: white;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-      transition: box-shadow 0.3s ease, transform 0.3s ease;
-    }
+.card h2 {
+  font-family: 'Great Vibes', cursive;
+  font-size: 2rem;
+  margin-bottom: 15px;
+  color: #6B4EFF;
+}
 
-    .card:hover {
-      box-shadow: 0 10px 25px rgba(130, 90, 255, 0.2);
-      transform: translateY(-4px);
-    }
+input[type="file"] {
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
 
-    .card h3 {
-      margin-top: 0;
-      font-weight: 600;
-      color: #825aff;
-    }
+button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  background: #6B4EFF;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.3s;
+}
 
-    /* File input */
-    input[type="file"] {
-      display: block;
-      margin: 10px 0;
-    }
+button:hover {
+  background: #5936c9;
+}
 
-    /* Mood board grid */
-    #mood-board {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 12px;
-    }
+#moodBoard {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
 
-    #mood-board img {
-      width: 100%;
-      border-radius: 12px;
-      transition: transform 0.3s ease;
-    }
+#moodBoard img {
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  transition: transform 0.3s ease;
+}
 
-    #mood-board img:hover {
-      transform: scale(1.05);
-    }
+#moodBoard img:hover {
+  transform: scale(1.05);
+}
 
-    /* Footer */
-    footer {
-      text-align: center;
-      margin: 40px 0 20px;
-      color: #b3a0ff;
-      font-weight: 300;
-      font-size: 0.9rem;
-    }
+footer {
+  text-align: center;
+  padding: 15px;
+  background: rgba(230, 224, 248, 0.8);
+  font-size: 0.9rem;
+  color: #5a4a9c;
+}
 
-    /* Responsive */
-    @media(min-width: 768px) {
-      .container {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>My Mood Board</h1>
-    <p class="lead">Upload your favorite images and see them beautifully arranged.</p>
-  </header>
-
-  <main class="container">
-    <section class="card">
-      <h3>Upload Images</h3>
-      <input type="file" id="image-upload" multiple accept="image/*">
-    </section>
-
-    <section class="card">
-      <h3>Your Mood Board</h3>
-      <div id="mood-board"></div>
-    </section>
-  </main>
-
-  <footer>
-    &copy; 2025 Marame — All rights reserved
-  </footer>
-
-  <script>
-    const uploadInput = document.getElementById('image-upload');
-    const moodBoard = document.getElementById('mood-board');
-
-    uploadInput.addEventListener('change', function() {
-      moodBoard.innerHTML = ''; // clear previous images
-      const files = Array.from(this.files);
-
-      files.forEach(file => {
-        const reader = new FileReader();
-        reader.onload = fu
+@media(max-width:768px) {
+  #moodBoard img {
+    max-width: 45%;
+    max-height: 150px;
+  }
+}
