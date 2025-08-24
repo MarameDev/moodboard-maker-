@@ -1,34 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Mood Board Maker • Marame</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Roboto:wght@300;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Mood Board • Marame</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Roboto:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <style>
+    /* General Styles */
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #E6E0F8;
+      background-image: url('https://images.unsplash.com/photo-1549887534-2a78fa5e5a8b?auto=format&fit=crop&w=1500&q=60');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      color: #333;
+    }
+
+    header {
+      text-align: center;
+      padding: 30px 20px 10px;
+      background: rgba(230, 224, 248, 0.8);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    header h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3rem;
+      margin: 0;
+      color: #6B4EFF;
+    }
+
+    header p {
+      margin: 5px 0 0;
+      font-size: 1.2rem;
+      color: #5a4a9c;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.85);
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 30px;
+      max-width: 900px;
+      width: 100%;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .card h2 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2rem;
+      margin-bottom: 15px;
+      color: #6B4EFF;
+    }
+
+    input[type="file"] {
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: none;
+      background: #6B4EFF;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #5936c9;
+    }
+
+    #moodBoard {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    #moodBoard img {
+      max-width: 200px;
+      max-height: 200px;
+      border-radius: 12px;
+      object-fit: cover;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      transition: transform 0.3s ease;
+    }
+
+    #moodBoard img:hover {
+      transform: scale(1.05);
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: rgba(230, 224, 248, 0.8);
+      font-size: 0.9rem;
+      color: #5a4a9c;
+    }
+
+    @media(max-width:768px) {
+      #moodBoard img {
+        max-width: 45%;
+        max-height: 150px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<header>
-  <h1>Mood Board Maker</h1>
-  <p>Create your aesthetic vision board instantly</p>
-</header>
+  <header>
+    <h1>Mood Board</h1>
+    <p>Upload your images and create your visual mood board</p>
+  </header>
 
-<main>
-  <div class="card">
-    <h2>Upload Your Images</h2>
-    <input type="file" id="imageInput" multiple accept="image/*">
-    <button id="downloadBoard">Download Board</button>
-    <div id="moodBoard"></div>
-  </div>
-</main>
+  <main>
+    <section class="card">
+      <h2>Add Your Images</h2>
+      <input type="file" id="imageInput" multiple accept="image/*">
+      <button id="downloadBoard">Download Mood Board</button>
+      <div id="moodBoard"></div>
+    </section>
+  </main>
 
-<footer>
-  &copy; 2025 Marame — All rights reserved
-</footer>
+  <footer>
+    &copy; 2025 Marame — All rights reserved
+  </footer>
 
-<!-- Include html2canvas from CDN -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="script.js"></script>
+  <!-- Link JS -->
+  <script src="script.js"></script>
+
 </body>
 </html>
