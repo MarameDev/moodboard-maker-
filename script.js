@@ -1,6 +1,7 @@
 const imageInput = document.getElementById('imageInput');
 const moodBoard = document.getElementById('moodBoard');
 
+// Upload images to mood board
 imageInput.addEventListener('change', (e) => {
   const files = e.target.files;
   for (let file of files) {
@@ -14,7 +15,8 @@ imageInput.addEventListener('change', (e) => {
   }
 });
 
-// Optional: download board as single image using html2canvas (needs external library)
+// Download placeholder
 document.getElementById('downloadBoard').addEventListener('click', () => {
-  alert("Download feature will be added later. For now, right-click images to save.");
+  alert("Download feature coming soon! Right-click images to save for now.");
 });
+
