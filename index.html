@@ -1,240 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>My Books • Marame</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <title>My Mood Board • Marame</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
   <style>
-    /* Background with subtle lilac geometric pattern */
+    /* Body & Background */
     body {
       font-family: 'Poppins', sans-serif;
       margin: 0;
       padding: 20px;
-      background: linear-gradient(135deg, #e6e0ff 25%, #d1c4ff 75%);
-      color: #333;
-      background-image:
-        radial-gradient(circle at 10% 10%, rgba(122, 95, 255, 0.05) 2px, transparent 3px),
-        radial-gradient(circle at 80% 20%, rgba(122, 95, 255, 0.05) 2px, transparent 3px),
-        radial-gradient(circle at 50% 80%, rgba(122, 95, 255, 0.05) 2px, transparent 3px);
+      background: #E6E0F8; /* lilac base */
+      background-image: url('https://i.imgur.com/OuG0pZy.png'); /* subtle floral pattern, can replace */
       background-repeat: repeat;
-      background-size: 100px 100px;
-      opacity: 0;
-      animation: fadeIn 1s forwards;
-    }
-
-    @keyframes fadeIn {
-      to { opacity: 1; }
+      background-size: 150px 150px;
+      color: #333;
     }
 
     header {
-      max-width: 900px;
-      margin: 0 auto 20px;
-      position: sticky;
-      top: 0;
-      background: #f3f0ff;
-      padding: 20px 0;
-      box-shadow: 0 2px 5px rgba(122, 95, 255, 0.1);
-      z-index: 100;
-      animation: slideDown 0.6s ease forwards;
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-
-    @keyframes slideDown {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      text-align: center;
+      margin-bottom: 30px;
     }
 
     h1 {
-      color: #7a5fff;
-      margin-bottom: 6px;
-      font-weight: 600;
+      color: #5D3FD3;
       font-size: 2.5rem;
+      margin-bottom: 10px;
     }
 
     p.lead {
-      color: #6b6b6b;
-      margin-top: 0;
       font-weight: 300;
       font-size: 1.1rem;
+      color: #5D3FD3;
     }
 
+    /* Container */
     .container {
-      max-width: 900px;
+      max-width: 1000px;
       margin: 0 auto;
-      display: grid;
-      gap: 18px;
-      grid-template-columns: 1fr;
     }
 
-    .card {
-      background: white;
-      border-radius: 12px;
+    /* Upload Form */
+    .upload-card {
+      background: rgba(255,255,255,0.85);
       padding: 20px;
-      box-shadow: 0 6px 18px rgba(122, 95, 255, 0.1);
-      transition: box-shadow 0.3s ease, transform 0.3s ease;
-    }
-
-    .card:hover {
-      box-shadow: 0 10px 25px rgba(122, 95, 255, 0.2);
-      transform: translateY(-4px);
-    }
-
-    .card + .card {
-      margin-top: 30px;
-      border-top: 1px solid #d8cfff;
-      padding-top: 30px;
-    }
-
-    .card h3 {
-      margin-top: 0;
-      font-weight: 600;
-      color: #7a5fff;
-    }
-
-    form input, form textarea, form button {
-      width: 100%;
-      padding: 10px;
-      margin: 6px 0;
       border-radius: 12px;
-      border: 1px solid #ccc;
-      font-size: 14px;
-      font-family: 'Poppins', sans-serif;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      margin-bottom: 20px;
+      text-align: center;
     }
 
-    form button {
-      background: #7a5fff;
+    .upload-card input[type="file"] {
+      margin: 10px 0;
+    }
+
+    .upload-card button {
+      background: #5D3FD3;
       color: white;
       border: none;
-      cursor: pointer;
-      font-weight: 600;
-      transition: background-color 0.3s ease;
-    }
-
-    form button:hover {
-      background: #5e3fff;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-family: 'Poppins', sans-serif;
-    }
-
-    th, td {
-      padding: 8px;
-      border-bottom: 1px solid #eee;
-      text-align: left;
-    }
-
-    th {
-      background: #f3f0ff;
-      color: #7a5fff;
-    }
-
-    /* Filter controls styling */
-    .filter-group {
-      margin-bottom: 10px;
-    }
-    .filter-group label {
-      margin-right: 8px;
-      font-weight: 600;
-      color: #7a5fff;
-    }
-    .filter-group select {
-      padding: 6px 10px;
+      padding: 10px 20px;
       border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 14px;
-      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
     }
 
-    /* Responsive */
-    @media(min-width: 768px) {
-      .container {
-        grid-template-columns: 1fr 1fr;
-      }
+    .upload-card button:hover {
+      background: #4728A0;
+    }
+
+    /* Mood board grid */
+    .mood-board {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+    }
+
+    .mood-board img {
+      width: 100%;
+      border-radius: 12px;
+      object-fit: cover;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: grab;
+    }
+
+    .mood-board img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     }
 
     footer {
       text-align: center;
       margin: 40px 0 20px;
-      color: #8b7aff;
+      color: #5D3FD3;
       font-weight: 300;
       font-size: 0.9rem;
     }
-
   </style>
 </head>
 <body>
   <header>
-    <h1>My Books — Share & Track</h1>
-    <p class="lead">Keep track of your reading — and add yours too!</p>
+    <h1>My Mood Board</h1>
+    <p class="lead">Upload images and create your own aesthetic mood board!</p>
   </header>
 
   <main class="container">
-    <section class="card">
-      <h3>Add a Book</h3>
-      <form action="https://formsubmit.co/bentabidou@gmail.com" method="POST">
-        <input type="text" name="Title" placeholder="Book Title" required />
-        <input type="text" name="Author" placeholder="Author" required />
-        <input type="number" name="Rating" placeholder="Rating (1-5)" min="1" max="5" />
-        <input type="date" name="DateRead" />
-        <textarea name="Notes" placeholder="Your thoughts"></textarea>
-        <button type="submit">Add Book</button>
-      </form>
-    </section>
+    <div class="upload-card">
+      <input type="file" id="imageInput" multiple accept="image/*">
+      <button id="addImagesBtn">Add to Mood Board</button>
+    </div>
 
-    <section class="card">
-      <h3>Book List</h3>
-      <div class="filter-group">
-        <label for="filter-author">Filter by author:</label>
-        <select id="filter-author">
-          <option value="all">All</option>
-          <option value="jane doe">Jane Doe</option>
-          <option value="john smith">John Smith</option>
-        </select>
-
-        <label for="filter-rating" style="margin-left: 15px;">Filter by rating:</label>
-        <select id="filter-rating">
-          <option value="all">All</option>
-          <option value="5">5 stars</option>
-          <option value="4">4 stars & up</option>
-          <option value="3">3 stars & up</option>
-        </select>
-      </div>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Rating</th>
-            <th>Date Read</th>
-            <th>Notes</th>
-          </tr>
-        </thead>
-        <tbody id="book-list">
-          <tr>
-            <td>Example Book</td>
-            <td>Jane Doe</td>
-            <td>5</td>
-            <td>2025-08-01</td>
-            <td>Really enjoyed it!</td>
-          </tr>
-          <tr>
-            <td>Another Book</td>
-            <td>John Smith</td>
-            <td>4</td>
-            <td>2025-07-20</td>
-            <td>Good read</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+    <div class="mood-board" id="moodBoard">
+      <!-- Uploaded images will appear here -->
+    </div>
   </main>
 
   <footer>
@@ -242,39 +121,30 @@
   </footer>
 
   <script>
-    const filterAuthor = document.getElementById('filter-author');
-    const filterRating = document.getElementById('filter-rating');
-    const bookList = document.getElementById('book-list');
+    const imageInput = document.getElementById('imageInput');
+    const addImagesBtn = document.getElementById('addImagesBtn');
+    const moodBoard = document.getElementById('moodBoard');
 
-    function filterBooks() {
-      const author = filterAuthor.value.toLowerCase();
-      const rating = filterRating.value;
-      const rows = bookList.getElementsByTagName('tr');
+    addImagesBtn.addEventListener('click', () => {
+      const files = imageInput.files;
+      if(!files.length) return alert('Please select at least one image!');
 
-      for (let row of rows) {
-        const rowAuthor = row.cells[1].textContent.toLowerCase();
-        const rowRating = parseInt(row.cells[2].textContent, 10);
-
-        let authorMatch = author === 'all' || rowAuthor === author;
-        let ratingMatch = false;
-
-        if (rating === 'all') {
-          ratingMatch = true;
-        } else if (rating === '5') {
-          ratingMatch = rowRating === 5;
-        } else if (rating === '4') {
-          ratingMatch = rowRating >= 4;
-        } else if (rating === '3') {
-          ratingMatch = rowRating >= 3;
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = e => {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          moodBoard.appendChild(img);
         }
+        reader.readAsDataURL(file);
+      });
 
-        if (authorMatch && ratingMatch) {
-          row.style.display = '';
-        } else {
-          row.style.display = 'none';
-        }
-      }
-    }
+      imageInput.value = ''; // reset input
+    });
+  </script>
+</body>
+</html>
+
 
 
 
