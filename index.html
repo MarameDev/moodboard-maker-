@@ -6,90 +6,134 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
   <style>
+    /* Body & background */
     body {
-      font-family: 'Poppins', sans-serif;
       margin: 0;
-      padding: 20px;
-      background: linear-gradient(135deg, #ffe6f0 25%, #ffd1e6 75%);
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f3e8ff 0%, #d6b3ff 100%);
       color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      overflow-x: hidden;
     }
+
     header {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
     }
+
     h1 {
-      color: #d6336c;
-      font-weight: 600;
+      font-size: 2.5rem;
+      color: #6a0dad;
+      margin-bottom: 8px;
     }
-    .container {
+
+    p.lead {
+      font-size: 1.1rem;
+      color: #4d1f75;
+    }
+
+    /* Mood board area */
+    #mood-board {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 15px;
+      width: 100%;
       max-width: 900px;
-      margin: 0 auto;
     }
-    .upload-section {
-      margin-bottom: 20px;
+
+    .board-item {
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+      cursor: grab;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-    input[type="file"] {
-      display: block;
-      margin-bottom: 10px;
-    }
-    button {
-      padding: 10px 20px;
-      background: #d6336c;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-    button:hover {
-      background: #b82a5c;
-    }
-    .board {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    .board img {
-      width: 150px;
-      height: 150px;
-      object-fit: cover;
+
+    .board-item img {
+      width: 100%;
       border-radius: 10px;
-      transition: transform 0.3s;
+      display: block;
     }
-    .board img:hover {
-      transform: scale(1.1);
+
+    .board-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     }
-    footer {
+
+    /* Upload area */
+    #upload-section {
+      margin-bottom: 30px;
       text-align: center;
-      margin-top: 40px;
-      color: #b36b88;
-      font-weight: 300;
-      font-size: 0.9rem;
     }
+
+    input[type="file"] {
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 40px;
+      color: #4d1f75;
+      font-weight: 300;
+    }
+
   </style>
 </head>
 <body>
+
   <header>
     <h1>My Mood Board</h1>
-    <p>Upload images and create your own aesthetic board. Download to save!</p>
+    <p class="lead">Upload your favorite images and create a visual mood board!</p>
   </header>
 
-  <div class="container">
-    <section class="upload-section">
-      <input type="file" id="imageInput" multiple accept="image/*">
-      <button id="downloadBoard">Download Board as Image</button>
-    </section>
+  <section id="upload-section">
+    <input type="file" id="image-upload" multiple accept="image/*">
+    <p style="font-size:0.9rem; color:#4d1f75; margin-top:5px;">Tip: Download your mood board after adding images to keep it safe.</p>
+  </section>
 
-    <section class="board" id="moodBoard">
-      <!-- Uploaded images will appear here -->
-    </section>
+  <div id="mood-board">
+    <!-- Uploaded images appear here -->
   </div>
 
   <footer>
     &copy; 2025 Marame — All rights reserved
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+    const uploadInput = document.getElementById('image-upload');
+    const board = document.getElementById('mood-board');
+
+    uploadInput.addEventListener('change', function(e){
+      const files = Array.from(e.target.files);
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const div = document.createElement('div');
+          div.classList.add('board-item');
+          const img = document.createElement('img');
+          img.src = event.target.result;
+          div.appendChild(img);
+          board.appendChild(div);
+        }
+        reader.readAsDataURL(file);
+      });
+      // Clear input
+      uploadInput.value = '';
+    });
+  </script>
+
 </body>
 </html>
+
 
