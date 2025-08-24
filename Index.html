@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Mood Board Generator • Marame</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --pink:#d6336c;
+      --bg1:#ffe6f0;
+      --bg2:#ffd1e6;
+      --ink:#333;
+      --muted:#6b6b6b;
+    }
+
+    /* Base */
+    * { box-sizing: border-box; }
+    body{
+      margin:0; padding:24px;
+      font-family:'Poppins',sans-serif; color:var(--ink);
+      background: linear-gradient(135deg, var(--bg1) 25%, var(--bg2) 75%);
+      background-image:
+        radial-gradient(circle at 10% 10%, rgba(214,51,108,.05) 2px, transparent 3px),
+        radial-gradient(circle at 80% 20%, rgba(214,51,108,.05) 2px, transparent 3px),
+        radial-gradient(circle at 50% 80%, rgba(214,51,108,.05) 2px, transparent 3px);
+      background-size:100px 100px;
+      opacity:0; animation:fadeIn .8s forwards;
+    }
+    @keyframes fadeIn{to{opacity:1}}
+
+    header{
+      max-width:1100px; margin:0 auto 18px;
+      position:sticky; top:0; z-index:10;
+      background:#fff0f6; padding:16px 12px;
+      border-radius:12px;
+      box-shadow:0 2px 8px rgba(214,51,108,.12);
+    }
+    h1{ margin:0 0 4px; color:var(--pink); font-weight:600; font-size:2rem;}
+    p.lead{ margin:0; color:var(--muted); font-weight:300; }
+
+    .container{
+      max-width:1100px; margin:0 auto;
+      display:grid; gap:16px;
+      grid-template-columns: 1fr;
+    }
+
+    .card{
+      background:#fff; border-radius:14px; padding:16px;
+      box-shadow:0 6px 18px rgba(0,0,0,.06);
+      transition:.25s ease; backdrop-filter: blur(2px);
+    }
+    .card:hover{ transform:translateY(-2px); box-shadow:0 10px 26px rgba(214,51,108,.18); }
+
+    /* Controls */
+    .controls{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+    .controls label{ font-size:14px; font-weight:600; color:var(--pink); margin-right:6px; }
+    .controls .group{ display:flex; align-items:center; gap:8px; background:#fff0f6; padding:8px 10px; border-radius:12px; }
+    select, input[type="range"]{
+      font:inherit; border:1px solid #eee; border-radius:8px; padding:6px 8px; background:#fff;
+    }
+    .btn{
+      border:none; border-radius:999px; padding:10px 14px; font-weight:600; cursor:pointer;
+      background:var(--pink); color:#fff; transition:.2s ease; box-shadow:0 6px 16px rgba(214,51,108,.25);
+    }
+    .btn.secondary{ background:#fff; color:var(--pink); border:1px solid #f6c; }
+    .btn:hover{ filter:brightness(.95); transform:translateY(-1px); }
+
+    /* Dropzone */
+    .dropzone{
+      border:2px dashed rgba(214,51,108,.35); border-radius:14px;
+      padding:18px; text-align:center; color:var(--muted); background:#fff;
+    }
+    .dropzone.drag{ background:#fff7fb; border-color:var(--pink); color:var(--pink); }
+    .dropzone input{ display:none; }
+    .dropzone p{ margin:6px 0 0; font-size:.95rem; }
+
+    /* Board wrapper (for export) */
+    #board-wrap{ background:#fff; padding:16px; border-radius:16px; }
+
+    /* Layouts */
+    #board{ display:grid; gap:12px; }
+    /* Grid */
+    .layout-grid #board{ grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+    /* Masonry (CSS columns) */
+    .layout-masonry #board{
+      column-count: 1; column-gap: 12px;
+    }
+    .layout-masonry .tile{ break-inside: avoid; margin:0 0 12px; }
+    @media(min-width:600px){ .layout-masonry #board{ column-count: 2; } }
+    @media(min-width:900px){ .layout-masonry #board{ column-count: 3; } }
+
+    /* Polaroid */
+    .layout-polaroid #board{ grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+    .polaroid{
+      background:#fff; padding:10px 10px 26px; border-radius:12px; box-shadow:0 10px 20px rgba(0,0,0,.12);
+      transform:rotate(var(--rot, 0deg));
+      transition:.2s ease;
+    }
+    .polaroid:hover{ transform:rotate(var(--rot, 0deg)) translateY(-2px); }
+    .polaroid .caption{ text-align:center; color:#999; font-size:.85rem; margin-top:8px; }
+
+    /* Tiles */
+    .tile{
+      position:relative; border-radius:12px; overflow:hidden; background:#f8f8f8; cursor:grab;
+      box-shadow:0 4px 10px rgba(0,0,0,.08);
+    }
+    .tile img{ width:100%; height:100%; object-fit:cover; display:block; }
+    .tile .remove{
+      position:absolute; top:8px; right:8px; background:rgba(0,0,0,.5); color:#fff; border:none;
+      border-radius:999px; width:28px; height:28px; cursor:pointer; font-weight:700;
+    }
+
+    /* Banner warning */
+    .notice{
+      text-align:center; color:#b36b88; font-weight:600; font-size:.95rem;
+      background:#fff0f6; border:1px dashed #f5b5cc; padding:10px; border-radius:10px;
+    }
+  </style>
+</head>
+<body class="layout-grid">
+  <header>
+    <h1>Mood Board — Générateur</h1>
+    <p class="lead">Upload tes images → choisis un style → télécharge ton board (PNG/PDF). Rien n’est sauvegardé en ligne.</p>
+  </header>
+
+  <main class="container">
+    <!-- Upload -->
+    <section class="card">
+      <div class="controls" style="justify-content:space-between;">
+        <div class="group">
+          <label for="layout">Layout</label>
+          <select id="layout">
+            <option value="grid">Grid</option>
+            <option value="masonry">Masonry</option>
+            <option value="polaroid">Polaroid</option>
+          </select>
+        </div>
+
+        <div class="group">
+          <label for="gap">Gap</label>
+          <input type="range" id="gap" min="4" max="32" value="12" />
+          <label for="radius">Radius</label>
+          <input type="range" id="radius" min="0" max="24" value="12" />
+        </div>
+
+        <div class="group">
+          <button id="shuffle" class="btn secondary" type="button">Shuffle</button>
+          <button id="clear" class="btn secondary" type="button">Clear</button>
+          <button id="savePNG" class="btn" type="button">Download PNG</button>
+          <button id="savePDF" class="btn" type="button">Download PDF</button>
+        </div>
+      </div>
+
+      <div id="dropzone" class="dropzone" tabindex="0">
+        <strong>Glisse-dépose des images ici</strong> ou
+        <label class="btn secondary" for="file-input" style="margin-left:6px;">Choisir des fichiers</label>
+        <input id="file-input" type="file" accept="image/*" multiple />
+        <p>Astuce : tu peux réorganiser les images par glisser-déposer.</p>
+      </div>
+    </section>
+
+    <!-- Board + Notice -->
+    <section class="card">
+      <div class="notice">⚠️ Rien n’est enregistré. Télécharge ton mood board avant de fermer la page.</div>
+      <div id="board-wrap" style="margin-top:12px;">
+        <div id="board"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="container" style="margin-top:16px;">
+    <div class="notice">© 2025 Marame — Site statique (HTML/CSS/JS). Aucune image n’est stockée côté serveur.</div>
+  </footer>
+
+  <!-- Libs pour l’export -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
+  <script>
+    const board = document.getElementById('board');
+    const dropzone = document.getElementById('dropzone');
+    const fileInput = document.getElementById('file-input');
+    const layoutSel = document.getElementById('layout');
+    const gapRange = document.getElementById('gap');
+    const radiusRange = document.getElementById('radius');
+    const shuffleBtn = document.getElementById('shuffle');
+    const clearBtn = document.getElementById('clear');
+    const savePNGBtn = document.getElementById('savePNG');
+    const savePDFBtn = document.getElementById('savePDF');
+
+    let items = []; // {src, name, rot?}
+
+    // Helpers
+    const readFiles = (files) => {
+      Array.from(files).forEach(file=>{
+        if(!file.type.startsWith('image/')) return;
+        const reader = new FileReader();
+        reader.onload = e=>{
+          const rot = (Math.random()*6-3).toFixed(2); // -3° à +3° pour polaroid
+          items.push({ src:e.target.result, name:file.name, rot });
+          render();
+        };
+        reader.readAsDataURL(file);
+      });
+    };
+
+    // Render
+    function render(){
+      board.innerHTML = '';
+      board.style.gap = gapRange.value+'px';
+      const radius = radiusRange.value+'px';
+
+      const isPolaroid = document.body.classList.contains('layout-polaroid');
+
+      items.forEach((it, idx)=>{
+        const wrap = document.createElement('div');
+        wrap.className = isPolaroid ? 'polaroid tile' : 'tile';
+        if(isPolaroid){ wrap.style.setProperty('--rot', it.rot+'deg'); }
+
+        wrap.draggable = true;
+        wrap.addEventListener('dragstart', (e)=>{ e.dataTransfer.setData('text/plain', idx); });
+        wrap.addEventListener('dragover', (e)=>{ e.preventDefault(); });
+        wrap.addEventListener('drop', (e)=>{
+          e.preventDefault();
+          const from = parseInt(e.dataTransfer.getData('text/plain'),10);
+          const to = idx;
+          if(from===to) return;
+          const moved = items.splice(from,1)[0];
+          items.splice(to,0,moved);
+          render();
+        });
+
+        const img = document.createElement('img');
+        img.src = it.src;
+        img.alt = it.name || 'image';
+        img.style.borderRadius = isPolaroid ? '8px' : radius;
+
+        const btn = document.createElement('button');
+        btn.className='remove'; btn.title='Retirer';
+        btn.textContent='×';
+        btn.onclick = ()=>{ items.splice(idx,1); render(); };
+
+        wrap.appendChild(img);
+        wrap.appendChild(btn);
+
+        if(isPolaroid){
+          const cap = document.createElement('div');
+          cap.className='caption';
+          cap.textContent = it.name?.replace(/\.[^.]+$/,'') || '—';
+          wrap.appendChild(cap);
+        }
+
+        board.appendChild(wrap);
+      });
+    }
+
+    // Layout switch
+    layoutSel.addEventListener('change', ()=>{
+      document.body.classList.remove('layout-grid','layout-masonry','layout-polaroid');
+      document.body.classList.add('layout-'+layoutSel.value);
+      render();
+    });
+
+    // Gap / Radius
+    gapRange.addEventListener('input', render);
+    radiusRange.addEventListener('input', render);
+
+    // Shuffle
+    shuffleBtn.addEventListener('click', ()=>{
+      for(let i=items.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [items[i], items[j]] = [items[j], items[i]];
+      }
+      render();
+    });
+
+    // Clear
+    clearBtn.addEventListener('click', ()=>{
+      if(confirm('Tout effacer ?')){ items = []; render(); }
+    });
+
+    // Upload: file input + drag & drop
+    fileInput.addEventListener('change', (e)=> readFiles(e.target.files));
+    ;['dragenter','dragover'].forEach(ev => dropzone.addEventListener(ev, e=>{
+      e.preventDefault(); dropzone.classList.add('drag');
+    }));
+    ;['dragleave','drop'].forEach(ev => dropzone.addEventListener(ev, e=>{
+      e.preventDefault(); dropzone.classList.remove('drag');
+    }));
+    dropzone.addEventListener('drop', e=>{
+      const dt = e.dataTransfer;
+      if(dt && dt.files) readFiles(dt.files);
+    });
+    dropzone.addEventListener('click', ()=> fileInput.click());
+
+    // Export PNG
+    savePNGBtn.addEventListener('click', async ()=>{
+      const wrap = document.getElementById('board-wrap');
+      const canvas = await html2canvas(wrap, { backgroundColor:'#ffffff', useCORS:true, scale:2 });
+      const url = canvas.toDataURL('image/png');
+      const a = document.createElement('a');
+      a.href = url; a.download = 'moodboard.png'; a.click();
+    });
+
+    // Export PDF
+    savePDFBtn.addEventListener('click', async ()=>{
+      const wrap = document.getElementById('board-wrap');
+      const canvas = await html2canvas(wrap, { backgroundColor:'#ffffff', useCORS:true, scale:2 });
+      const imgData = canvas.toDataURL('image/jpeg', 1.0);
+      const { jsPDF } = window.jspdf;
+
+      // Choix orientation selon ratio
+      const w = canvas.width, h = canvas.height;
+      const orientation = w > h ? 'l' : 'p';
+      const pdf = new jsPDF({ orientation, unit:'pt', format:'a4' });
+
+      const pageW = pdf.internal.pageSize.getWidth();
+      const pageH = pdf.internal.pageSize.getHeight();
+      // Fit
+      const ratio = Math.min(pageW/w, pageH/h);
+      const imgW = w*ratio, imgH = h*ratio;
+      const offsetX = (pageW - imgW)/2;
+      const offsetY = (pageH - imgH)/2;
+
+      pdf.addImage(imgData, 'JPEG', offsetX, offsetY, imgW, imgH);
+      pdf.save('moodboard.pdf');
+    });
+
+    // First render
+    render();
+  </script>
+</body>
+</html>
